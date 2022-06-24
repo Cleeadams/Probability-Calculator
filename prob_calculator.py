@@ -13,8 +13,11 @@ class Hat:
     def draw(self, drawn):
         if drawn > len(self.contents):
             sample = random.sample(self.contents, len(self.contents))
+            self.contents.clear()
         else:
             sample = random.sample(self.contents, drawn)
+            for i in sample:
+                self.contents.remove(i)
         return sample
 
 def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
@@ -22,10 +25,11 @@ def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
     for i in range(num_experiments):
         expected_occur_list = []
         sample = hat.draw(num_balls_drawn)
+        hat.contents.extend(sample)
         for key in expected_balls.keys():
             expected_occur_list.append(sample.count(key))
         if list(expected_balls.values()) <= expected_occur_list:
             success += 1
     prob = success / num_experiments
-    print(prob)
+    return prob
 
